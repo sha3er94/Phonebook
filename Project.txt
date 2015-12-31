@@ -1,0 +1,129 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct
+{
+    char data[30];
+    struct node *right;
+    struct node *left;
+}node;
+node name,ID;
+void initialize(node *root)
+{
+    root=NULL;
+}
+void insertion(node *root,char x[30])
+{
+    printf("roott ==%s\n",root->data);
+    if (root=='\0')
+    {
+        node *temp=(node *)malloc(sizeof(node));
+        strcpy(temp->data,x);
+        root=temp;
+        temp->left=NULL;
+        temp->right=NULL;
+        printf("in IF 1 =%s\n",root->data);
+    }
+    else if (x>root->data&&root->right!=NULL)
+        insertion(root->right,x);
+    else if (x<root->data&&root->left!=NULL)
+        insertion(root->left,x);
+    else
+    {
+        node *temp=(node *)malloc(sizeof(node));
+        strcpy(temp->data,x);
+        temp->left=NULL;
+        temp->right=NULL;
+        if(x>root->data)
+            root->right = temp;
+        if(x<root->data)
+            root->left = temp;
+        printf("in else =%s\n",root->data);
+
+    }
+
+}
+void preorder (node *root)
+{
+    if (root==NULL){
+        printf("offf\n");
+        return;
+    }
+    printf("root=%d ",root->data);
+    preorder(root->left);
+    preorder(root->right);
+}
+void inorder (node *root)
+{
+    if(root==NULL)
+        return;
+    inorder(root->left);
+    printf("%d ",root->data);
+    inorder(root->right);
+}
+void postorder (node *root)
+{
+    if(root==NULL)
+        return;
+    postorder(root->left);
+    postorder(root->right);
+    printf("%d ",root->data);
+}
+int main ()
+{
+    char choice;
+    char student[30];
+    char id[30];
+    printf("\t\t\tWelcome To Our Project\n");
+    printf("Options :-\n\n");
+    printf("1 - Load\n2 - Insert\n3 - Search\n4 - Delete\n5 - Display\n6 - Exit\n\n");
+    printf("Please choose the option by entering the corresponding number:\n");
+    scanf("%c",&choice);
+    initialize(&name);
+    initialize(&ID);
+  while (choice>='1'&&choice<='5'&&choice!='6')
+{
+    char ch;
+    switch(choice)
+    {
+    //case '1':
+        //load();
+        //break;
+    case '2':
+        getchar();
+        printf("Enter The Student's Name\n");
+        gets(student);
+        insertion(&name,student);
+
+        printf("Enter The Student's ID\n");
+        gets(id);
+        insertion(&ID,id);
+        break;
+    case '5':
+        printf("1 - PreOrder\n2 - InOrder\n3 - PostOrder\n");
+        printf("Enter The Method Of Displaying\n");
+        getchar();
+        scanf("%c",&ch);
+        switch (ch){
+        case '1': preorder(&name);break;
+        case '2': inorder(&name);break;
+        case '3': postorder(&name);break;
+        default :{
+            printf("Please Enter A Valid Choice\n");
+            break;
+        }
+        }
+        break;
+    case '6':
+            exit(0);
+    default:
+        main();
+    }
+    printf("\n\n");
+    printf("Options :-\n\n");
+    printf("1 - Load\n2 - Insert\n3 - Search\n4 - Delete\n5 - Display\n6 - Exit\n\n");
+    printf("\nPlease choose the option by entering the corresponding number:\n");
+    scanf("%c",&choice);
+}
+    return 0;
+}

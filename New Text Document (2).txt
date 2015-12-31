@@ -1,0 +1,216 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include<string.h>
+typedef struct bstnames
+{
+char firstname[25];
+char lastname[25];
+struct bstnames* right;
+struct bstnames* left;
+struct bstid *id;
+};
+struct bstnames*Name=NULL;
+typedef struct bstid
+{
+char id[20];
+struct bstid*right;
+struct bstid*left;
+struct bstnames* name;
+};
+struct bstid*Id=NULL;
+void constructorNames(struct bstnames* p)
+{
+    p->right=NULL;
+    p->left=NULL;
+    p->id=NULL;
+}
+void constructor(struct bstid* p)
+{
+    p->right=NULL;
+    p->left=NULL;
+    p->name=NULL;
+}
+void fadd()
+{
+int x;
+struct bstnames* tempname;
+struct bstid*tempid;
+int i=0,j=0;
+int word=0;
+char first[25];
+char last[25];
+char number[10];
+FILE * f;
+char line[1000];
+f = fopen("names.txt","r");
+if (f != NULL)
+{
+printf("file exist !\n");
+while(!(feof(f)))
+{
+fgets(line,100,f);
+printf("%s\n",line);
+    int n=strlen(line);
+      word=0;
+      j=0;
+      i=0;
+      while(word<3)
+        {
+            if(word==0)
+            {
+                while(line[i]!=',')
+                {
+                 first[j]=line[i];
+                 i++;
+                 j++;
+                }
+                first[j]='\0';
+                i++;
+            }
+            else if(word==1)
+            {
+                j=0;
+                while(line[i]!=',')
+                {
+                   last[j]=line[i];
+                   i++;
+                   j++;
+                }
+            last[j]='\0';
+            i++;
+            }
+            else if(word==2)
+            {
+                j=0;
+                while(line[i]!='\0')
+                {
+                   number[j]=line[i];
+                   j++;
+                   i++;
+                }
+                number[j]='\0';
+                i++;
+            }
+        word++;
+        }
+        int flag=0;
+        printf("First :%s\n",first);
+        printf("Last :%s\n",last);
+        printf("number :%s\n",number);
+    struct bstnames*p=(struct bstnames*)malloc(sizeof(struct bstnames));
+    constructorNames(p);
+    struct bstid*pid=(struct bstid*)malloc(sizeof(struct bstid));
+    constructor(pid);
+    strcpy(p->firstname,first);
+    strcpy(p->lastname,last);
+    //strcpy msh bet7ot el \0
+    strcpy(pid->id,number);
+    p->id=pid;
+    pid->name=p;
+    if(Name==NULL)
+    {
+    Name=p;
+    }
+    else
+    {
+        tempname=Name;
+        struct bstnames* runner;
+        //printf("%d\n%d\n",tempname,Name);
+        while(tempname)
+        {
+         x=strcmpi(tempname->firstname,first);
+        printf("aham haga hena fel 5ara ely ana fih %d\n",x);
+         if(x==0)
+         {
+                flag=1;
+                printf("Equality\n");
+                break;
+         }
+         else if(x>0)
+            {
+            runner=tempname;
+            tempname=tempname->left;
+            }
+         else
+            {
+            runner=tempname;
+            tempname=tempname->right;
+            }
+        }
+        if(flag==1)
+        {
+            int y;
+            y=strcmpi(tempname->lastname,last);
+            if(y>0)
+            {
+            if(tempname->left==NULL)
+            tempname->left=p;
+            else
+            {
+            struct bstnames*tempo=tempname->left;
+            tempname->left=p;
+            p->left=tempo;
+            }
+            }
+            else if(y<0)
+            {
+            if(tempname->right==NULL)
+            tempname->right=p;
+            else
+            {
+            struct bstnames*tempo=tempname->right;
+            tempname->right=p;
+            p->right=tempo;
+            }
+            }
+            else
+            {
+            if(tempname->left==NULL)
+            tempname->left=p;
+            else
+            {
+            struct bstnames*tempo=tempname->left;
+            tempname->left=p;
+            p->left=tempo;
+            }
+            }
+        }
+        else{
+        x=strcmpi(runner->firstname,first);
+        if(x>0)
+        {
+         runner->left=p;
+        }
+        if(x<0)
+        {
+            printf("yemin %s",runner->firstname);
+            runner->right=p;
+        }
+            }
+    }
+   // if((*id)==NULL)
+    //{
+    //(id)=pid;
+    //}
+    }
+fclose(f);
+}
+else printf("File doesn't exist");
+}
+void Preorder(struct bstnames *root) {
+ if (root != NULL)
+    {
+  printf("first name: %s\nlast name: %s\n ", root->firstname,root->lastname);
+  Preorder(root->left);
+  Preorder(root->right);
+    }
+}
+void traverseId(struct bstid*p);
+int main()
+{
+    fadd(Name,Id);
+    printf("\t\t\t\t Traverse\n");
+    Preorder(Name);
+    //printf("\n\n\n\n\n\n\n");
+    return 0;
+}
